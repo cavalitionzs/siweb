@@ -21,7 +21,7 @@ $routes->setDefaultController('Home');
 $routes->setDefaultMethod('index');
 $routes->setTranslateURIDashes(false);
 $routes->set404Override();
-$routes->setAutoRoute(true);
+$routes->setAutoRoute(false);
 
 /*
  * --------------------------------------------------------------------
@@ -32,6 +32,18 @@ $routes->setAutoRoute(true);
 // We get a performance increase by specifying the default
 // route since we don't have to scan directories.
 $routes->get('/', 'Home::index');
+$routes->get('/book', 'Book::index');
+$routes->get('/book/create', 'Book::create');
+$routes->post('/book/create', 'Book::save');
+$routes->get('/book-edit/(:any)', 'Book::edit/$1');
+$routes->post('/book-edit/(:any)', 'Book::update/$1');
+$routes->get('/book-detail/(:any)', 'Book::detail/$1');
+$routes->delete('/book/(:num)', 'Book::delete/$1');
+
+$routes->get('/komik', 'Komik::index');
+$routes->get('/komik/create', 'Komik::create');
+$routes->post('/komik/create', 'Komik::save');
+$routes->get('/komik-detail/(:any)', 'Komik::detail/$1');
 
 /*
  * --------------------------------------------------------------------
