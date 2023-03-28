@@ -48,7 +48,7 @@
                                     <a href="<?= base_url('book-detail/' . $value['slug']) ?>" class="btn btn-primary">
                                         <i class="fas fa-info-circle"></i>
                                         Detail</a>
-                                    <a href="<?= base_url('book-edit/' . $value['slug']) ?>" class="btn btn-warning">
+                                    <a href="<?= base_url('book/edit/' . $value['slug']) ?>" class="btn btn-warning">
                                         <i class="fas fa-into-circle"></i>
                                         Ubah</a>
                                     <form action="<?= base_url('book/' . $value['book_id']) ?>" method="post" class="d-inline">

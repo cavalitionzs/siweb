@@ -14,7 +14,7 @@
             <div>
                 <div class="card-body">
                     <!--ISI-->
-                    <form action=" /book/edit/<?= $result['book_id'] ?>" method="POST" enctype="multipart/form-data">
+                    <form action=" /komik/edit/<?= $result['komik_id'] ?>" method="POST" enctype="multipart/form-data">
                         <?= csrf_field() ?>
                         <input type="hidden" name="slug" value="<?= $result['slug'] ?>">
                         <div class="mb-3 row">
@@ -75,11 +75,11 @@
                             </div>
                         </div>
                         <div class="mb-3 row">
-                            <label for="book_category_id" class="col-sm-2 col-form-label">Kategori</label>
+                            <label for="komik_category_id" class="col-sm-2 col-form-label">Kategori</label>
                             <div class="col-sm-3">
-                                <select type="text" class="form-control" id="book_category_id" name="book_category_id">
+                                <select type="text" class="form-control" id="komik_category_id" name="komik_category_id">
                                     <?php foreach ($category as $value) : ?>
-                                        <option value="<?= $value['book_category_id'] ?>" <?= $value['book_category_id'] == $result['book_category_id'] ? 'selected' : '' ?>>
+                                        <option value="<?= $value['komik_category_id'] ?>" <?= $value['komik_category_id'] == $result['komik_category_id'] ? 'selected' : '' ?>>
                                             <?= $value['name_category'] ?> </option>
                                     <?php endforeach; ?>
                                 </select>
@@ -89,7 +89,7 @@
                             <button class="btn btn-primary me-md-2" type="submit">Edit</button>
                             <button class=" btn btn-danger" type="reset">Batal</button>
                             <div class="d-grip gap-2 d-md-block">
-                                <a class="btn btn-dark" type="button" href="<?= base_url('book') ?>">Kembali</a>
+                                <a class="btn btn-dark" type="button" href="<?= base_url('komik') ?>">Kembali</a>
                             </div>
                         </div>
                     </form>

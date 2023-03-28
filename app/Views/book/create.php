@@ -28,7 +28,10 @@
                         <div class="mb-3 row">
                             <label for="author" class="col-sm-2 col-form-label">Penulis</label>
                             <div class="col-sm-10">
-                                <input type="text" class="form-control" id="author" name="author">
+                                <input type="text" class="form-control <?= $validation->hasError('author') ? 'is-invalid' : '' ?>" id="author" name="author">
+                                <div id="validationServer03Feedback" class="invalid-feedback">
+                                    <?= $validation->getError('author') ?>
+                                </div>
                             </div>
                         </div>
                         <div class="mb-3 row">
@@ -71,21 +74,24 @@
                                     <img src="/img/default.jpg" alt="" class="img-thumbnail img-preview">
                                 </div>
                             </div>
-                            <div class="mb-3 row">
-                                <label for="book_category_id" class="col-sm-2 col-form-label">Kategori</label>
-                                <div class="col-sm-3">
-                                    <select type="text" class="form-control" id="book_category_id" name="book_category_id">
-                                        <?php foreach ($category as $value) : ?>
-                                            <option value="<?= $value['book_category_id'] ?>">
-                                                <?= $value['name_category'] ?> </option>
-                                        <?php endforeach; ?>
-                                    </select>
-                                </div>
+                        </div>
+                        <div class="mb-3 row">
+                            <label for="book_category_id" class="col-sm-2 col-form-label">Kategori</label>
+                            <div class="col-sm-3">
+                                <select type="text" class="form-control" id="book_category_id" name="book_category_id">
+                                    <?php foreach ($category as $value) : ?>
+                                        <option value="<?= $value['book_category_id'] ?>">
+                                            <?= $value['name_category'] ?> </option>
+                                    <?php endforeach; ?>
+                                </select>
                             </div>
-                            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                                <button class="btn btn-primary me-md-2" type="submit">Simpan</button>
-                                <button class=" btn btn-danger" type="reset">Batal</button>
-                            </div>
+                        </div>
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <button class="btn btn-primary me-md-2" type="submit">Simpan</button>
+                            <button class=" btn btn-danger" type="reset">Batal</button>
+                            <a class="btn btn-dark" type="button" href="<?= base_url('book') ?>">Kembali</a>
+                        </div>
+
                     </form>
                     <!--ISI-->
                 </div>

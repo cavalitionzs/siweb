@@ -92,16 +92,15 @@ class Book extends BaseController
         if ($dataOld['title'] == $this->request->getVar('title')) {
             $rule_title = 'required';
         } else {
-            $rule_title = 'required|is_unique[book.title]';
+            $rule_title = 'required';
         }
         // VALIDASI INPUT
         if (!$this->validate([
             'title' => [
-                'rules' => 'required|is_unique[book.title]',
+                'rules' => 'required',
                 'label' => 'Judul',
                 'errors' => [
                     'required' => '{field} harus diisi',
-                    'is_unique' => '{field} hanya sudah ada'
                 ]
             ],
             'author' => [
@@ -152,13 +151,16 @@ class Book extends BaseController
                 ]
             ],
         ])) {
-            return redirect()->to('book/edit' . $this->request->getVar('slug'))->withInput();
+            return redirect()->to('book/edit/' . $this->request->getVar('slug'))->withInput();
         }
 
         $OldFileName = $this->request->getVar('OldCover');
         $fileCover = $this->request->getFile('cover');
         if ($fileCover->getError() == 4) {
             $fileName = $this->$OldFileName;
+            // if ($fileCover == "") {
+            //     $fileName = $OldFileName;
+            // }
         } else {
             $fileName = $fileCover->getRandomName();
             $fileCover->move('img', $fileName);
