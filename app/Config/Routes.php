@@ -48,6 +48,16 @@ $routes->get('/komik/edit/(:any)', 'Komik::edit/$1');
 $routes->get('/komik-detail/(:any)', 'Komik::detail/$1');
 $routes->delete('/komik/(:num)', 'Komik::delete/$1');
 
+// customer //
+$routes->get('/customer/index', 'Customer::index');
+$routes->addRedirect('/customer', '/customer/index')
+    ->get('/customer/index', 'Customer::index')->setAutoRoute(true);
+
+// supplier //
+$routes->get('/supplier/index', 'Supplier::index');
+$routes->addRedirect('/supplier', '/supplier/index')
+    ->get('/supplier/index', 'Supplier::index')->setAutoRoute(true);
+
 /*
  * --------------------------------------------------------------------
  * Additional Routing

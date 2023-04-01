@@ -8,12 +8,20 @@
                     Dashboard
                 </a>
                 <a class="nav-link" href="/book">
-                    <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                    <div class="sb-nav-link-icon"><i class="fas fa-book"></i></div>
                     Data Buku
                 </a>
                 <a class="nav-link" href="/komik">
-                    <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                    <div class="sb-nav-link-icon"><i class="fas fa-book"></i></div>
                     Data Buku Komik
+                </a>
+                <a class="nav-link" href="/customer">
+                    <div class="sb-nav-link-icon"><i class="fas fa-users"></i></div>
+                    Data Customer
+                </a>
+                <a class="nav-link" href="/supplier">
+                    <div class="sb-nav-link-icon"><i class="fas fa-users"></i></div>
+                    Data Supplier
                 </a>
             </div>
         </div>
