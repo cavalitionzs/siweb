@@ -58,6 +58,11 @@ $routes->get('/supplier/index', 'Supplier::index');
 $routes->addRedirect('/supplier', '/supplier/index')
     ->get('/supplier/index', 'Supplier::index')->setAutoRoute(true);
 
+// DATA MAHASISWA //
+$routes->get('/mahasiswa/index', 'Mahasiswa::index');
+$routes->addRedirect('/mahasiswa', '/mahasiswa/index')
+    ->get('/mahasiswa/index', 'Mahasiswa::index')->setAutoRoute(true);
+
 /*
  * --------------------------------------------------------------------
  * Additional Routing

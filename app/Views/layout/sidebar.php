@@ -23,6 +23,10 @@
                     <div class="sb-nav-link-icon"><i class="fas fa-users"></i></div>
                     Data Supplier
                 </a>
+                <a class="nav-link" href="/mahasiswa">
+                    <div class="sb-nav-link-icon"><i class="fas fa-users"></i></div>
+                    Data Mahasiswa
+                </a>
             </div>
         </div>
         <div class="sb-sidenav-footer">
