@@ -34,7 +34,6 @@ use CodeIgniter\Model;
  */
 class GroceryCrudModel extends Model
 {
-
 	protected $primary_key = null;
 	protected $table_name = null;
 	protected $relation = array();
