@@ -11,9 +11,4 @@ class Home extends BaseController
         ];
         return view('admin/overview', $data);
     }
-
-    // public function index()
-    // {
-    //     return view('admin/overview');
-    // }
 }

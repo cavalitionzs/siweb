@@ -12,7 +12,7 @@
                         <?php if (isset($validation)) : ?>
                             <div class="alert alert-danger"><?= $validation->listErrors() ?></div>
                         <?php endif; ?>
-                        <form action="/login/save" method="post">
+                        <form action="/login/save" method="POST">
                             <?= csrf_field() ?>
                             <div class="form-floating mb-3">
                                 <input class="form-control <?php if (session('error.email')) : ?> is-invalid <?php endif ?>" name="email" type="email" placeholder="Email" value="<?= old('email') ?>" />

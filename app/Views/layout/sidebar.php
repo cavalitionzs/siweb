@@ -27,6 +27,12 @@
                     <div class="sb-nav-link-icon"><i class="fas fa-users"></i></div>
                     Data Mahasiswa
                 </a>
+                <?php if (session()->role == "Admin" || session()->role == "Owner") : ?>
+                    <a class="nav-link" href="/users">
+                        <div class="sb-nav-link-icon"><i class="fas fa-users fa-fw"></i></div>
+                        Data User
+                    </a>
+                <?php endif; ?>
             </div>
         </div>
         <div class="sb-sidenav-footer">

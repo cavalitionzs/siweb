@@ -18,34 +18,35 @@ class Users extends BaseController
     {
         $dataUser = $this->userModel->getUsers();
         $data = [
-            'tittle'  => _TITLE,
+            'title'  => _TITLE,
             'result'  => $dataUser
         ];
-        return view('user/index', $data);
+        return view('users/index', $data);
+        // dd($dataUser);
     }
 
     public function create()
     {
         $data = [
-            'tittle' => 'Tambah User'
+            'title' => 'Tambah User'
         ];
-        return view('user/create', $data);
+        return view('users/create', $data);
     }
 
     public function edit($id)
     {
         $dataUser = $this->userModel->getUsers($id);
         $data = [
-            'tittle'  => _TITLE,
+            'title'  => _TITLE,
             'result'  => $dataUser
         ];
-        return view('user/edit', $data);
+        return view('users/edit', $data);
     }
 
     public function update($id)
     {
         $user_myth = new UsersModel();
-        // dd($this->reques->getVar('username'));
+        // dd($this->request->getVar('username'));
         $this->userModel->save([
             'id'            => $id,
             'firstname'     => $this->request->getVar('firstname'),
@@ -77,5 +78,7 @@ class Users extends BaseController
             'role'          => $this->request->getVar('role'),
             'user_password' => password_hash($this->request->getVar('password'), PASSWORD_DEFAULT),
         ]);
+        session()->setFlashdata('msg', 'Berhasil menambah user!');
+        return redirect()->to('/users');
     }
 }

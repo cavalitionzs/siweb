@@ -14,7 +14,7 @@
             <div>
                 <div class="card-body">
                     <!-- Form Tambah User  -->
-                    <form action="<?= base_url('users/edit' . $result['id']) ?>" method="POST">
+                    <form action="<?= base_url('users/edit/' . $result['id']) ?>" method="POST">
                         <?= csrf_field() ?>
                         <div class="mb-3 row">
                             <label for="name" class="col-sm-2 col-for m-label">Nama Depan</label>

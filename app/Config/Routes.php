@@ -63,14 +63,19 @@ $routes->get('/mahasiswa/index', 'Mahasiswa::index');
 $routes->addRedirect('/mahasiswa', '/mahasiswa/index')
     ->get('/mahasiswa/index', 'Mahasiswa::index')->setAutoRoute(true);
 
+// HOME //
+$routes->get('/', 'Home::index', ['filter' => 'auth']);
+$routes->get('/page', 'Home::page');
+
 // LOGIN //
 $routes->get('/login', 'Auth::indexlogin');
-$routes->get('/logout', 'Auth::logout');
 $routes->post('/login/auth', 'Auth::auth');
+$routes->get('/logout', 'Auth::logout');
 $routes->get('/login/register', 'Auth::indexregister');
 $routes->post('/login/save', 'Auth::saveRegister');
 
-$routes->group('users', ['filter' => 'role'], ['filter' => 'auth'], function ($r) {
+// DATA USERS //
+$routes->group('users', ['filter' => 'auth'], function ($r) {
     $r->get('/', 'Users::index');
     $r->get('index', 'Users::index');
     $r->get('create', 'Users::create');

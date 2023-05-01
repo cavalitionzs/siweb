@@ -6,14 +6,8 @@ use CodeIgniter\Controller;
 use App\Models\UsersModel;
 use CodeIgniter\I18n\Time;
 
-class Auth extends Controller
+class Auth extends BaseController
 {
-    public function indexlogin()
-    {
-        helper(['form']);
-        echo view('auth/login');
-    }
-
     public function indexregister()
     {
         helper(['form']);
@@ -25,23 +19,24 @@ class Auth extends Controller
     public function saveRegister()
     {
         helper(['form']);
-        // set rules validation form
+
+        //set rules validation form
         $rules = [
             'username'      => 'required|min_length[3]|max_length[20]',
             'email'         => 'required|min_length[6]|max_length[50]|valid_email|is_unique[pengguna.user_email]',
             'password'      => 'required|min_length[6]|max_length[200]',
-            'pass_confirm'  => 'matches[password]'
+            'pass_confirm'  => 'matches[password]',
         ];
+        //dd($rules)
+        //$validation = \Config\Services::validation();
 
-        // dd($rules);
-        // $validation = \Config\Services::validation();
         if ($this->validate($rules)) {
             $model = new UsersModel();
-            $data  = [
-                'user_name'     => $this->request->getVar('username'),
-                'user_email'    => $this->request->getVar('email'),
-                'user_password' => password_hash($this->request->getVar('password'), PASSWORD_DEFAULT),
-                'user_created_at' => Time::now('America/Chicago', 'en_US'),
+            $data = [
+                'user_name'         => $this->request->getVar('username'),
+                'user_email'        => $this->request->getVar('email'),
+                'user_password'     => password_hash($this->request->getVar('password'), PASSWORD_DEFAULT),
+                'user_created_at'   => Time::now('America/Chicago', 'en_US'),
             ];
             $model->save($data);
             return redirect()->to('/login');
@@ -51,16 +46,23 @@ class Auth extends Controller
         }
     }
 
+    public function indexlogin()
+    {
+        helper(['form']);
+        echo view('auth/login');
+    }
+
     public function auth()
     {
         $session = session();
         $model = new UsersModel();
-        $email = $this->request->getVar('email');
-        // $username = $this->request->getVar('email');
+        $email = $this->request->getvar('email');
+        // username = $this->request->getVar('email');
         // dd($email);
         $password = $this->request->getVar('password');
         $data = $model->where('user_email', $email)->orwhere('user_name', $email)->first();
         // dd($data);
+
         if ($data) {
             $pass = $data['user_password'];
             $verify_pass = password_verify($password, $pass);
@@ -79,7 +81,7 @@ class Auth extends Controller
                 return redirect()->to('/login')->withInput();
             }
         } else {
-            $session->setFlashdata('msg', 'Email atau Username Tidak ada');
+            $session->setFlashdata('msg', 'Email atau Username Tidak Ada');
             return redirect()->to('/login')->withInput();
         }
     }

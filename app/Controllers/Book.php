@@ -31,7 +31,7 @@ class Book extends BaseController
             'title' => _TITLE,
             'data_book' => $dataBook
         ];
-        // dd($data_book);
+        // dd($dataBook);
         return view('book/index', $data);
     }
 
