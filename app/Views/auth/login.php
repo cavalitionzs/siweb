@@ -38,14 +38,14 @@
                             </div>
                         </form>
                     </div>
-                    <div class="card-footer text-center py-3">
+                    <!-- <div class="card-footer text-center py-3">
                         <div class="small">
                             <a href="login/register">Register</a>
                         </div>
                         <div class="small">
                             <a href="/">Back</a>
                         </div>
-                    </div>
+                    </div> -->
                 </div>
                 <div class="card-footer text-center py-3"></div>
             </div>

@@ -26,10 +26,10 @@ class Book extends BaseController
 
     public function index()
     {
-        $dataBook   = $this->bookModel->getBook();
+        $data_book   = $this->bookModel->getBook();
         $data = [
             'title' => _TITLE,
-            'data_book' => $dataBook
+            'data_book' => $data_book
         ];
         // dd($dataBook);
         return view('book/index', $data);
@@ -59,8 +59,8 @@ class Book extends BaseController
 
     public function edit($slug)
     {
-        $dataBook = $this->bookModel->getBook($slug);
-        if (empty($dataBook)) {
+        $data_book = $this->bookModel->getBook($slug);
+        if (empty($data_book)) {
             throw new \CodeIgniter\Exceptions\PageNotFoundException("Judul buku $slug tidak ditemukan!");
         }
 
@@ -68,7 +68,7 @@ class Book extends BaseController
             'title' => 'Ubah Buku',
             'category' => $this->catModel->findAll(),
             'validation' => \Config\Services::validation(),
-            'result' => $dataBook
+            'result' => $data_book
         ];
         // dd($data);
         return view('book/edit', $data);
@@ -76,10 +76,10 @@ class Book extends BaseController
 
     public function delete($id)
     {
-        $dataBook = $this->bookModel->find($id);
+        $data_book = $this->bookModel->find($id);
         $this->bookModel->delete($id);
-        if ($dataBook['cover'] != $this->defaultImage) {
-            unlink('img/' . $dataBook['cover']);
+        if ($data_book['cover'] != $this->defaultImage) {
+            unlink('img/' . $data_book['cover']);
         }
         session()->setFlashdata("msg", "Data berhasil dihapus!");
         return redirect()->to('/book');

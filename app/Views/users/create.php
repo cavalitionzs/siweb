@@ -42,6 +42,8 @@
                                 <select class="form-control" name="role">
                                     <option value="Karyawan">Karyawan</option>
                                     <option value="Admin">Admin</option>
+                                    <option value="Owner">Owner</option>
+                                    <option value="Manajer">Manajer</option>
                                 </select>
                             </div>
                         </div>
