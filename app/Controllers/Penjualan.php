@@ -4,20 +4,25 @@ namespace App\Controllers;
 
 use \App\Models\BookModel;
 use \App\Models\CustomerModel;
+use \App\Models\SaleModel;
+use \App\Models\SaleDetailModel;
 
 define('_TITLE', 'Data Penjualan');
 
 class Penjualan extends BaseController
 {
-    private $book, $cart, $cust;
+    private $book, $cart, $cust, $sale, $saleDetail;
     public function __construct()
     {
-        $this->book = new BookModel();
-        $this->cust = new CustomerModel();
-        $this->cart = \Config\Services::cart();
+        $this->book       = new BookModel();
+        $this->cust       = new CustomerModel();
+        $this->sale       = new SaleModel();
+        $this->saleDetail = new SaleDetailModel();
+        $this->cart       = \Config\Services::cart();
     }
     public function index()
     {
+        $this->cart->destroy();
         $book = $this->book->getBook();
         $cust = $this->cust->findAll();
         $data = [
@@ -80,6 +85,22 @@ class Penjualan extends BaseController
         echo $this->showCart();
     }
 
+    public function updateCart()
+    {
+        $this->cart->update(array(
+            'rowid'     => $this->request->getVar('rowid'),
+            'qty'       => $this->request->getVar('qty')
+        ));
+        echo $this->showCart();
+    }
+
+    public function deleteCart($rowid)
+    {
+        // Fungsi untuk menghapus item cart
+        $this->cart->remove($rowid);
+        echo $this->showCart();
+    }
+
     public function getTotal()
     {
         $totalBayar = 0;
@@ -88,5 +109,78 @@ class Penjualan extends BaseController
             $totalBayar += $items['subtotal'] - $diskon;
         }
         echo number_to_currency($totalBayar, 'IDR', 'id_ID', 2);
+    }
+
+    public function pembayaran()
+    {
+        if (!$this->cart->contents()) {
+            // Ga Ada Transaksi
+            $response = [
+                'status'    => false,
+                'msg'       => "Tidak Ada Transaksi!",
+            ];
+            echo json_encode($response);
+        } else {
+            // Ada Transaksi
+            $totalBayar = 0;
+            foreach ($this->cart->contents() as $items) {
+                $diskon = ($items['options']['discount'] / 100) * $items['subtotal'];
+                $totalBayar += $items['subtotal'] - $diskon;
+            }
+
+            $nominal = $this->request->getVar('nominal');
+            $id = "J" . time();
+            // Pengecekan apakah nominal yang dimasukkan cukup atau kurang
+            if ($nominal < $totalBayar) {
+                $response = [
+                    'status'    => false,
+                    'msg'       => "Nominal Pembayaran Kurang!",
+                ];
+                echo json_encode($response);
+            } else {
+                // Jika nominal memenuhi, akan menyimpan data di tabel sale dan sale_detail
+                $this->sale->save([
+                    'sale_id'    => $id,
+                    'user_id'    => session()->user_id,
+                    'customer_id' => $this->request->getVar('id-cust')
+                ]);
+
+                foreach ($this->cart->contents() as $items) {
+                    $this->saleDetail->save([
+                        'sale_id'    => $id,
+                        'book_id'    => $items['id'],
+                        'amount'     => $items['qty'],
+                        'price'      => $items['price'],
+                        'discount'   => $diskon,
+                        'total_price' => $items['subtotal'] - $diskon,
+                    ]);
+
+                    // Mengurangi Jumlah stock di tabel buku
+                    // Get buku berdasarkan ID Buku
+                    $book = $this->book->where(['book_id' => $items['id']])->first();
+                    $this->book->save([
+                        'book_id'  => $items['id'],
+                        'stock'    => $book['stock'] - $items['qty'],
+                    ]);
+                }
+
+                $this->cart->destroy();
+                $kembalian = $nominal - $totalBayar;
+
+                $response = [
+                    'status'    => true,
+                    'msg'       => "Pembayaran Berhasil!",
+                    'data'      => [
+                        'kembalian' => number_to_currency(
+                            $kembalian,
+                            'IDR',
+                            'id_ID',
+                            2
+                        )
+                    ]
+                ];
+                echo json_encode($response);
+            }
+        }
     }
 }

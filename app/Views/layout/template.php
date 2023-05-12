@@ -33,6 +33,7 @@
             <script src="<?php echo $file; ?>"></script>
         <?php endforeach; ?>
     <?php endif; ?>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 </head>
 
 <body class="sb-nav-fixed">

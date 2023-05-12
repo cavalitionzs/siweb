@@ -92,6 +92,16 @@ $routes->group('jual', ['filter' => 'auth'], function ($r) {
     $r->get('load', 'Penjualan::loadCart');
     $r->post('/', 'Penjualan::addCart');
     $r->get('gettotal', 'Penjualan::getTotal');
+    $r->post('update', 'Penjualan::updateCart');
+    $r->post('bayar', 'Penjualan::pembayaran');
+    $r->delete('(:any)', 'Penjualan::deleteCart/$1');
+});
+
+$routes->group('beli', ['filter' => 'auth'], function ($r) {
+    $r->get('/', 'Pembelian::index');
+    $r->get('load', 'Pembelian::loadCart');
+    $r->post('/', 'Pembelian::addCart');
+    $r->get('gettotal', 'Pembelian::getTotal');
 });
 
 /*

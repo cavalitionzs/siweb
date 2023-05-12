@@ -30,13 +30,13 @@
                         <input type="text" value="<?= session()->user_name ?>" disabled>
                     </div>
                     <div class="col">
-                        <label class="col-form-label">Customer: </label>
-                        <input type="text" id="nama-cust" disabled>
-                        <input type="hidden" id="id-cust">
+                        <label class="col-form-label">Supplier: </label>
+                        <input type="text" id="nama-supp" disabled>
+                        <input type="hidden" id="id-supp">
                     </div>
                     <div class="col">
-                        <button class="btn btn-primary" data-bs-target="#modalProduk" data-bs-toggle="modal">Pilih Produk</button>
-                        <button class="btn btn-dark" data-bs-target="#modalCust" data-bs-toggle="modal">Cari Customer</button>
+                        <button class="btn btn-primary" data-bs-target="#modalKomik" data-bs-toggle="modal">Pilih Produk</button>
+                        <button class="btn btn-dark" data-bs-target="#modalSupp" data-bs-toggle="modal">Cari Supplier</button>
                     </div>
                 </div>
                 <table class="table table-striped table-hover mt-4">
@@ -70,14 +70,14 @@
                             <div class="mb-3 row">
                                 <label class="col-4 col-form-label">Kembalian</label>
                                 <div class="col-8">
-                                    <input type="text" class="form-control" id="kembalian" disabled>
+                                    <input type="text" class="form-control" id="kembalian disabled">
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="d-grid gap-3 d-md-flex justify-content-md-end">
-                        <button onclick="bayar()" class="btn btn-success me-md-2" type="button">Proses Bayar</button>
-                        <button onclick="location.reload()" class="btn btn-primary" type="button">Transaksi Baru</button>
+                        <button class="btn btn-success me-md-2" type="button">Proses Bayar</button>
+                        <button class="btn btn-primary" type="button">Transaksi Baru</button>
                     </div>
                 </div>
                 <!-- END ISI POS -->
@@ -85,61 +85,16 @@
         </div>
     </div>
 </main>
-<?= $this->include('penjualan/modal-produk') ?>
-<?= $this->include('penjualan/modal-customer') ?>
+<?= $this->include('pembelian/modal-komik') ?>
+<?= $this->include('pembelian/modal-supplier') ?>
 <script>
     function load() {
-        $('#detail_cart').load("<?= base_url('jual/load') ?>");
-        $('#spanTotal').load("<?= base_url('jual/gettotal') ?>");
+        $('#detail_cart').load("<?= base_url('beli/load') ?>");
+        $('#spanTotal').load("<?= base_url('beli/gettotal') ?>");
     }
 
     $(document).ready(function() {
         load();
     });
-
-    // Ubah Jumlah Item
-    $(document).on('click', '.ubah_cart', function() {
-        var row_id = $(this).attr("id");
-        var qty = $(this).attr("qty");
-        $('#rowid').val(row_id);
-        $('#qty').val(qty);
-        $('#modalUbah').modal('show');
-    });
-
-    // Hapus Item Cart
-    $(document).on('click', '.hapus_cart', function() {
-        var row_id = $(this).attr("id");
-        $.ajax({
-            url: "<?= base_url('jual') ?>/" + row_id,
-            method: "DELETE",
-            success: function(data) {
-                load();
-            }
-        });
-    });
-
-    // Pembayaran
-    function bayar() {
-        var nominal = $('#nominal').val();
-        var idcust = $('#id-cust').val();
-        $.ajax({
-            url: "<?= base_url('jual/bayar') ?>",
-            method: "POST",
-            data: {
-                'nominal': nominal,
-                'id-cust': idcust
-            },
-            success: function(response) {
-                var result = JSON.parse(response);
-                swal({
-                    title: result.msg,
-                    icon: result.status ? "success" : "error",
-                });
-                load();
-                $('#nominal').val("");
-                $('#kembalian').val(result.data.kembalian);
-            }
-        });
-    }
 </script>
 <?= $this->endSection() ?>

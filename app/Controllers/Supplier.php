@@ -16,6 +16,7 @@ class Supplier extends BaseController
         $crud->unsetColumns(['created_at', 'updated_at']);
         $crud->displayAs(array(
             'name' => 'Nama',
+            'no_supplier' => 'No supplier',
             'gender' => 'L/P',
             'address' => 'Alamat',
             'phone' => 'Telp',

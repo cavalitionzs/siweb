@@ -19,6 +19,18 @@
                         <a class="nav-link" href="">Laporan</a>
                     </nav>
                 </div>
+                <!-- Pembelian -->
+                <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts2" aria-expanded="false" aria-controls="collapseLayouts">
+                    <div class="sb-nav-link-icon"><i class="fas fa-shopping-cart"></i></div>
+                    Pembelian
+                    <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                </a>
+                <div class="collapse" id="collapseLayouts2" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                    <nav class="sb-sidenav-menu-nested nav">
+                        <a class="nav-link" href="<?= base_url('beli') ?>">Transaksi</a>
+                        <a class="nav-link" href="">Laporan</a>
+                    </nav>
+                </div>
                 <?php if (session()->role == "Karyawan" || session()->role == "Owner" || session()->role == "Manajer" || session()->role == "Admin") : ?>
                     <a class="nav-link" href="/book">
                         <div class="sb-nav-link-icon"><i class="fas fa-book"></i></div>

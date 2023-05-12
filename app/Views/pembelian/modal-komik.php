@@ -1,5 +1,5 @@
 <!-- ISI POS -->
-<div class="modal fade" id="modalProduk" aria-hidden="true" aria-labelledby="exampleModalToggleLabel" tabindex="-1">
+<div class="modal fade" id="modalKomik" aria-hidden="true" aria-labelledby="exampleModalToggleLabel" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered modal-xl">
         <div class="modal-content">
             <div class="modal-header">
@@ -22,7 +22,7 @@
                     </thead>
                     <tbody>
                         <?php $no = 1;
-                        foreach ($book as $value) : ?>
+                        foreach ($komik as $value) : ?>
                             <tr>
                                 <td><?= $no++ ?></td>
                                 <td>
@@ -33,7 +33,7 @@
                                 <td><?= $value['price'] ?></td>
                                 <td><?= $value['stock'] ?></td>
                                 <td>
-                                    <button onclick="add_cart('<?= $value['book_id'] ?>','<?= $value['title'] ?>','<?= $value['price'] ?>','<?= $value['discount'] ?>')" class="btn btn-success"><i class="fa fa-cart-plus"></i>Tambahkan</button>
+                                    <button onclick="add_cart('<?= $value['komik_id'] ?>','<?= $value['title'] ?>','<?= $value['price'] ?>','<?= $value['discount'] ?>')" class="btn btn-success"><i class="fa fa-cart-plus"></i>Tambahkan</button>
                                 </td>
                             </tr>
                         <?php endforeach; ?>
@@ -47,33 +47,11 @@
         </div>
     </div>
 </div>
-
-<div class="modal fade" id="modalUbah" aria-hidden="true" aria-labelledby="exampleModalToggleLabel" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalToggleLabel">UBAH JUMLAH PRODUK</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <div class="row mt-3">
-                    <div class="col-sm-7">
-                        <input type="hidden" id="rowid">
-                        <input type="number" id="qty" class="form-control" placeholder="Masukkan Jumlah Produk" min="1" value="1">
-                    </div>
-                    <div class="col-sm-5">
-                        <button class="btn btn-primary" onclick="update_cart()">Simpan</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 <!-- END ISI POS -->
 <script>
     function add_cart(id, name, price, discount) {
         $.ajax({
-            url: "<?= base_url('jual') ?>",
+            url: "<?= base_url('beli') ?>",
             method: "POST",
             data: {
                 id: id,
@@ -84,24 +62,6 @@
             },
             success: function(data) {
                 load()
-            }
-        });
-    }
-
-    function update_cart() {
-        var rowid = $('#rowid').val();
-        var qty = $('#qty').val();
-
-        $.ajax({
-            url: "<?= base_url('jual/update') ?>",
-            method: "POST",
-            data: {
-                rowid: rowid,
-                qty: qty,
-            },
-            success: function(data) {
-                load();
-                $('#modalUbah').modal('hide');
             }
         });
     }
