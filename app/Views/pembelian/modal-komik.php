@@ -65,4 +65,22 @@
             }
         });
     }
+
+    function update_cart() {
+        var rowid = $('#rowid').val();
+        var qty = $('#qty').val();
+
+        $.ajax({
+            url: "<?= base_url('beli/update') ?>",
+            method: "POST",
+            data: {
+                rowid: rowid,
+                qty: qty,
+            },
+            success: function(data) {
+                load();
+                $('#modalUbah').modal('hide');
+            }
+        });
+    }
 </script>

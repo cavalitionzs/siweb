@@ -102,6 +102,9 @@ $routes->group('beli', ['filter' => 'auth'], function ($r) {
     $r->get('load', 'Pembelian::loadCart');
     $r->post('/', 'Pembelian::addCart');
     $r->get('gettotal', 'Pembelian::getTotal');
+    $r->post('update', 'Pembelian::updateCart');
+    $r->post('bayar', 'Pembelian::pembayaran');
+    $r->delete('(:any)', 'Pembelian::deleteCart/$1');
 });
 
 /*
