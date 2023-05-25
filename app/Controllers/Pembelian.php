@@ -4,20 +4,23 @@ namespace App\Controllers;
 
 use \App\Models\KomikModel;
 use \App\Models\SupplierModel;
-use \App\Models\KomikSaleModel;
-use \App\Models\KomikSaleDetailModel;
+use \App\Models\KomikBuyModel;
+use \App\Models\KomikBuyDetailModel;
+use TCPDF;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 define('_TITLE', 'Data Pembelian');
 
 class Pembelian extends BaseController
 {
-    private $komik, $cart, $supp, $sale, $saleDetail;
+    private $komik, $cart, $supp, $buy, $buyDetail;
     public function __construct()
     {
         $this->komik = new KomikModel();
         $this->supp = new SupplierModel();
-        $this->sale       = new KomikSaleModel();
-        $this->saleDetail = new KomikSaleDetailModel();
+        $this->buy       = new KomikBuyModel();
+        $this->buyDetail = new KomikBuyDetailModel();
         $this->cart = \Config\Services::cart();
     }
     public function index()
@@ -134,16 +137,16 @@ class Pembelian extends BaseController
                 ];
                 echo json_encode($response);
             } else {
-                // Jika nominal memenuhi, akan menyimpan data di tabel sale dan sale_detail
-                $this->sale->save([
-                    'sale_id'    => $id,
+                // Jika nominal memenuhi, akan menyimpan data di tabel buy dan buy_detail
+                $this->buy->save([
+                    'buy_id'    => $id,
                     'user_id'    => session()->user_id,
                     'supplier_id' => $this->request->getVar('id-supp')
                 ]);
 
                 foreach ($this->cart->contents() as $items) {
-                    $this->saleDetail->save([
-                        'sale_id'    => $id,
+                    $this->buyDetail->save([
+                        'buy_id'    => $id,
                         'komik_id'    => $items['id'],
                         'amount'     => $items['qty'],
                         'price'      => $items['price'],
@@ -177,5 +180,119 @@ class Pembelian extends BaseController
                 echo json_encode($response);
             }
         }
+    }
+
+    public function report($tgl_awal = null, $tgl_akhir = null)
+    {
+        $_SESSION['tgl_awal'] = $tgl_awal == null ? date('Y-m-01') : $tgl_awal;
+        $_SESSION['tgl_akhir'] = $tgl_akhir == null ? date('Y-m-t') : $tgl_akhir;
+
+        $tgl1 = $_SESSION['tgl_awal'];
+        $tgl2 = $_SESSION['tgl_akhir'];
+
+        $report = $this->buy->getReport($tgl1, $tgl2);
+        $data = [
+            'title'   => 'Laporan Pembelian',
+            'result'  => $report,
+            'tanggal' => [
+                'tgl_awal'  => $tgl1,
+                'tgl_akhir' => $tgl2,
+            ],
+        ];
+        return view('pembelian/report', $data);
+        // dd($data);
+    }
+
+    public function exportPDF()
+    {
+        $tgl1 = $_SESSION['tgl_awal'];
+        $tgl2 = $_SESSION['tgl_akhir'];
+
+        $report = $this->buy->getReport($tgl1, $tgl2);
+        $data = [
+            'title'  => 'Laporan Pembelian',
+            'result' => $report,
+        ];
+        $html = view('pembelian/exportpdf', $data);
+        // dd($data);
+
+        $pdf = new TCPDF('L', PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+        $pdf->setPrintHeader(false);
+        $pdf->setPrintFooter(false);
+        $pdf->AddPage();
+        $pdf->writeHTML($html);
+        $this->response->setContentType('application/pdf');
+        $pdf->Output('laporan-pembelian.pdf', 'I');
+    }
+
+    public function invoicePDF($buy_id = null)
+    {
+        $report = $this->buyDetail->getInvoice($buy_id);
+        $data = [
+            'title'  => 'Laporan Pembelian',
+            'result' => $report,
+        ];
+        $html = view('pembelian/invoicePDF', $data);
+        // dd($data);
+
+        $pdf = new TCPDF('L', PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+        $pdf->setPrintHeader(false);
+        $pdf->setPrintFooter(false);
+        $pdf->AddPage();
+        $pdf->writeHTML($html);
+        $this->response->setContentType('application/pdf');
+        $pdf->Output('laporan-pembelian.pdf', 'I');
+    }
+
+    public function exportExcel()
+    {
+        $tgl1 = $_SESSION['tgl_awal'];
+        $tgl2 = $_SESSION['tgl_akhir'];
+
+        $report = $this->buy->getReport($tgl1, $tgl2);
+
+        $spreadsheet = new Spreadsheet();
+
+        //tulis header/nama kolom
+        $spreadsheet->setActiveSheetIndex(0)
+            ->setCellValue('A1', 'No')
+            ->setCellValue('B1', 'Nota')
+            ->setCellValue('C1', 'Tgl Transaksi')
+            ->setCellValue('D1', 'User')
+            ->setCellValue('E1', 'Supplier')
+            ->setCellValue('F1', 'Total');
+
+        //tulis data buku ke cell
+        $rows = 2;
+        $no = 1;
+        foreach ($report as $value) {
+            $spreadsheet->setActiveSheetIndex(0)
+                ->setCellValue('A' . $rows, $no++)
+                ->setCellValue('B' . $rows, $value['buy_id'])
+                ->setCellValue('C' . $rows, $value['tgl_transaksi'])
+                ->setCellValue('D' . $rows, $value['firstname'] . ' ' . $value['lastname'])
+                ->setCellValue('E' . $rows, $value['name_supp'])
+                ->setCellValue('F' . $rows, $value['total']);
+            $rows++;
+        }
+
+        //tulis dalam format xlsx
+        $writer = new Xlsx($spreadsheet);
+        $fileName = 'Laporan-Pembelian';
+
+        //redirect hasil generate xlsx ke web client
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment;filename=' . $fileName . '.xlsx');
+        header('Cache-Control: max-age=0');
+
+        $writer->save('php://output');
+        exit;
+    }
+
+    public function filter()
+    {
+        $_SESSION['tgl_awal'] = $this->request->getVar('tgl_awal');
+        $_SESSION['tgl_akhir'] = $this->request->getVar('tgl_akhir');
+        return $this->report($_SESSION['tgl_awal'], $_SESSION['tgl_akhir']);
     }
 }

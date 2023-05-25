@@ -16,7 +16,7 @@
                 <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
                     <nav class="sb-sidenav-menu-nested nav">
                         <a class="nav-link" href="<?= base_url('jual') ?>">Transaksi</a>
-                        <a class="nav-link" href="">Laporan</a>
+                        <a class="nav-link" href="<?= base_url('jual/laporan') ?>">Laporan</a>
                     </nav>
                 </div>
                 <!-- Pembelian -->
@@ -28,7 +28,7 @@
                 <div class="collapse" id="collapseLayouts2" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
                     <nav class="sb-sidenav-menu-nested nav">
                         <a class="nav-link" href="<?= base_url('beli') ?>">Transaksi</a>
-                        <a class="nav-link" href="">Laporan</a>
+                        <a class="nav-link" href="<?= base_url('beli/laporan') ?>">Laporan</a>
                     </nav>
                 </div>
                 <?php if (session()->role == "Karyawan" || session()->role == "Owner" || session()->role == "Manajer" || session()->role == "Admin") : ?>
@@ -66,7 +66,7 @@
             </div>
         </div>
         <div class="sb-sidenav-footer">
-            <div class="small">Logged in as:</div>
+            <div class="small">Logged in as : <?= session()->user_name ?></div>
             Start Bootstrap
         </div>
     </nav>

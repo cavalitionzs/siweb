@@ -33,6 +33,16 @@ $routes->setAutoRoute(false);
 // route since we don't have to scan directories.
 
 $routes->get('/', 'Home::index', ['filter' => 'auth']);
+
+// JUAL //
+$routes->post('/chart-transaksi', 'Home::showChartTransaksi');
+$routes->post('/chart-customer', 'Home::showChartCustomer');
+
+// BELI //
+$routes->post('/chart-beli', 'Home::showChartBeli');
+$routes->post('/chart-supplier', 'Home::showChartSupplier');
+
+// BUKU
 $routes->get('/book', 'Book::index', ['filter' => 'auth']);
 $routes->get('/book/create', 'Book::create');
 $routes->post('/book/create', 'Book::save');
@@ -41,6 +51,7 @@ $routes->get('/book/edit/(:any)', 'Book::edit/$1');
 $routes->get('/book-detail/(:any)', 'Book::detail/$1');
 $routes->delete('/book/(:num)', 'Book::delete/$1');
 
+// KOMIK
 $routes->get('/komik', 'Komik::index', ['filter' => 'auth']);
 $routes->get('/komik/create', 'Komik::create');
 $routes->post('/komik/create', 'Komik::save');
@@ -94,6 +105,11 @@ $routes->group('jual', ['filter' => 'auth'], function ($r) {
     $r->get('gettotal', 'Penjualan::getTotal');
     $r->post('update', 'Penjualan::updateCart');
     $r->post('bayar', 'Penjualan::pembayaran');
+    $r->get('laporan', 'Penjualan::report');
+    $r->post('laporan/filter', 'Penjualan::filter');
+    $r->get('invoicepdf/(:any)', 'Penjualan::invoicePDF/$1');
+    $r->get('exportpdf', 'Penjualan::exportpdf');
+    $r->get('exportexcel', 'Penjualan::exportExcel');
     $r->delete('(:any)', 'Penjualan::deleteCart/$1');
 });
 
@@ -104,8 +120,14 @@ $routes->group('beli', ['filter' => 'auth'], function ($r) {
     $r->get('gettotal', 'Pembelian::getTotal');
     $r->post('update', 'Pembelian::updateCart');
     $r->post('bayar', 'Pembelian::pembayaran');
+    $r->get('laporan', 'Pembelian::report');
+    $r->post('laporan/filter', 'Pembelian::filter');
+    $r->get('invoicepdf/(:any)', 'Pembelian::invoicePDF/$1');
+    $r->get('exportpdf', 'Pembelian::exportpdf');
+    $r->get('exportexcel', 'Pembelian::exportExcel');
     $r->delete('(:any)', 'Pembelian::deleteCart/$1');
 });
+
 
 /*
  * --------------------------------------------------------------------

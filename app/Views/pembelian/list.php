@@ -46,7 +46,6 @@
                             <th>Produk</th>
                             <th>Jumlah</th>
                             <th>Harga Satuan</th>
-                            <th>Diskon</th>
                             <th>Subtotal</th>
                             <th>Aksi</th>
                         </tr>
