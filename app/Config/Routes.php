@@ -42,30 +42,36 @@ $routes->post('/chart-customer', 'Home::showChartCustomer');
 $routes->post('/chart-beli', 'Home::showChartBeli');
 $routes->post('/chart-supplier', 'Home::showChartSupplier');
 
-// BUKU
-$routes->get('/book', 'Book::index', ['filter' => 'auth']);
-$routes->get('/book/create', 'Book::create');
-$routes->post('/book/create', 'Book::save');
-$routes->post('/book/edit/(:any)', 'Book::update/$1');
-$routes->get('/book/edit/(:any)', 'Book::edit/$1');
-$routes->get('/book-detail/(:any)', 'Book::detail/$1');
-$routes->delete('/book/(:num)', 'Book::delete/$1');
+// BUKU // 
+$routes->group('book', ['filter' => 'auth'], function ($r) {
+    $r->get('/', 'Book::index', ['filter' => 'auth']);
+    $r->get('create', 'Book::create');
+    $r->post('create', 'Book::save');
+    $r->post('edit/(:any)', 'Book::update/$1');
+    $r->get('edit/(:any)', 'Book::edit/$1');
+    $r->get('book-detail/(:any)', 'Book::detail/$1');
+    $r->delete('delete/(:num)', 'Book::delete/$1');
+    $r->post('import', 'Book::importData');
+});
 
-// KOMIK
-$routes->get('/komik', 'Komik::index', ['filter' => 'auth']);
-$routes->get('/komik/create', 'Komik::create');
-$routes->post('/komik/create', 'Komik::save');
-$routes->post('/komik/edit/(:any)', 'Komik::update/$1');
-$routes->get('/komik/edit/(:any)', 'Komik::edit/$1');
-$routes->get('/komik-detail/(:any)', 'Komik::detail/$1');
-$routes->delete('/komik/(:num)', 'Komik::delete/$1');
+// KOMIK //
+$routes->group('komik', ['filter' => 'auth'], function ($r) {
+    $r->get('/', 'Komik::index', ['filter' => 'auth']);
+    $r->get('create', 'Komik::create');
+    $r->post('create', 'Komik::save');
+    $r->post('edit/(:any)', 'Komik::update/$1');
+    $r->get('edit/(:any)', 'Komik::edit/$1');
+    $r->get('komik-detail/(:any)', 'Komik::detail/$1');
+    $r->delete('delete/(:num)', 'Komik::delete/$1');
+    $r->post('import', 'Komik::importData');
+});
 
-// customer //
+// DATA CUSTOMER //
 $routes->get('/customer/index', 'Customer::index', ['filter' => 'role:Manajer'], ['filter' => 'auth']);
 $routes->addRedirect('/customer', '/customer/index')
     ->get('/customer/index', 'Customer::index')->setAutoRoute(true);
 
-// supplier //
+// DATA SUPPLIER //
 $routes->get('/supplier/index', 'Supplier::index', ['filter' => 'role:Manajer'], ['filter' => 'auth']);
 $routes->addRedirect('/supplier', '/supplier/index')
     ->get('/supplier/index', 'Supplier::index')->setAutoRoute(true);
@@ -80,11 +86,15 @@ $routes->get('/', 'Home::index', ['filter' => 'auth']);
 $routes->get('/page', 'Home::page');
 
 // LOGIN //
-$routes->get('/login', 'Auth::indexlogin');
-$routes->post('/login/auth', 'Auth::auth');
+$routes->group('login', function ($r) {
+    $r->get('/', 'Auth::indexlogin');
+    $r->post('auth', 'Auth::auth');
+    $r->get('register', 'Auth::indexregister');
+    $r->post('save', 'Auth::saveRegister');
+});
+
+// LOGOUT // 
 $routes->get('/logout', 'Auth::logout');
-$routes->get('/login/register', 'Auth::indexregister');
-$routes->post('/login/save', 'Auth::saveRegister');
 
 // DATA USERS //
 $routes->group('users', ['filter' => 'role:Owner'], ['filter' => 'auth'], function ($r) {
@@ -97,7 +107,8 @@ $routes->group('users', ['filter' => 'role:Owner'], ['filter' => 'auth'], functi
     $r->delete('(:num)', 'Users::delete/$1');
 });
 
-// POS
+// POS //
+// JUAL //
 $routes->group('jual', ['filter' => 'auth'], function ($r) {
     $r->get('/', 'Penjualan::index');
     $r->get('load', 'Penjualan::loadCart');
@@ -113,6 +124,7 @@ $routes->group('jual', ['filter' => 'auth'], function ($r) {
     $r->delete('(:any)', 'Penjualan::deleteCart/$1');
 });
 
+// BELI //
 $routes->group('beli', ['filter' => 'auth'], function ($r) {
     $r->get('/', 'Pembelian::index');
     $r->get('load', 'Pembelian::loadCart');
@@ -127,7 +139,7 @@ $routes->group('beli', ['filter' => 'auth'], function ($r) {
     $r->get('exportexcel', 'Pembelian::exportExcel');
     $r->delete('(:any)', 'Pembelian::deleteCart/$1');
 });
-
+// END POS //
 
 /*
  * --------------------------------------------------------------------

@@ -5,6 +5,8 @@ namespace App\Controllers;
 use \App\Models\BookModel;
 use \App\Models\CategoryModel;
 use \App\Controllers\BaseController;
+use PhpOffice\PhpSpreadsheet\Reader\Xls;
+use PhpOffice\PhpSpreadsheet\Reader\Xlsx;
 
 define('_TITLE', 'Data Buku');
 
@@ -158,9 +160,9 @@ class Book extends BaseController
         $fileCover = $this->request->getFile('cover');
         if ($fileCover->getError() == 4) {
             $fileName = $this->$OldFileName;
-            // if ($fileCover == "") {
-            //     $fileName = $OldFileName;
-            // }
+            if ($fileCover == "") {
+                $fileName = $OldFileName;
+            }
         } else {
             $fileName = $fileCover->getRandomName();
             $fileCover->move('img', $fileName);
@@ -184,7 +186,7 @@ class Book extends BaseController
             'cover' => $fileName,
         ]);
         session()->setFlashdata("msg", "Data Berhasil Diubah!");
-        return redirect()->to('/book');
+        return redirect()->to('book/');
     }
 
     public function save()
@@ -271,6 +273,46 @@ class Book extends BaseController
             'cover' => $fileName,
         ]);
         session()->setFlashdata("msg", "Data Berhasil Ditambahkan!");
+        return redirect()->to('/book');
+    }
+
+    public function importData()
+    {
+        $file = $this->request->getFile("file");
+        $ext  = $file->getExtension();
+        if ($ext == "xls")
+            $reader = new Xls();
+        else
+            $reader = new Xlsx();
+        $spreadsheet = $reader->load($file);
+        $sheet = $spreadsheet->getActiveSheet()->toArray();
+
+        foreach ($sheet as $key => $value) {
+            if ($key == 0) continue;
+
+            $namaFile = $this->defaultImage;
+            // dd($value[1]);
+            $slug     = url_title($value[1], '-', true);
+
+            // Cek Judul //
+            $dataOld = $this->bookModel->getBook($slug);
+            if (!$dataOld) {
+                $this->bookModel->save([
+                    'title' => $value[1],
+                    'author' => $value[2],
+                    'release_year' => $value[3],
+                    'price' => $value[4],
+                    'discount' => $value[5] ?? 0,
+                    'stock' => $value[6],
+                    'book_category_id' => $value[7],
+                    'slug' => $slug,
+                    'cover' => $namaFile,
+                ]);
+                session()->setFlashdata("msg", "Data Behasil Diimport!");
+            } else if ($dataOld) {
+                session()->setFlashdata("msg", "Data sudah ada!");
+            }
+        }
         return redirect()->to('/book');
     }
 }

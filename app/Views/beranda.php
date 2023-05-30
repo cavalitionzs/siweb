@@ -176,7 +176,6 @@
         var tahun = $('#tahun-trans').val();
         $.ajax({
             url: "<?= base_url('/chart-transaksi') ?>",
-            // url: "/chart-transaksi",
             method: "POST",
             data: {
                 'tahun': tahun,

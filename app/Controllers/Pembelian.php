@@ -35,7 +35,6 @@ class Pembelian extends BaseController
         ];
         return view('pembelian/list', $data);
     }
-
     public function showCart()
     {
         $output = '';
@@ -65,13 +64,11 @@ class Pembelian extends BaseController
         }
         return $output;
     }
-
     public function loadCart()
     {
         // load data cart
         echo $this->showCart();
     }
-
     public function addCart()
     {
         $this->cart->insert(array(
@@ -85,7 +82,6 @@ class Pembelian extends BaseController
         ));
         echo $this->showCart();
     }
-
     public function updateCart()
     {
         $this->cart->update(array(
@@ -94,14 +90,12 @@ class Pembelian extends BaseController
         ));
         echo $this->showCart();
     }
-
     public function deleteCart($rowid)
     {
         // Fungsi untuk menghapus item cart
         $this->cart->remove($rowid);
         echo $this->showCart();
     }
-
     public function getTotal()
     {
         $totalBayar = 0;
@@ -110,7 +104,6 @@ class Pembelian extends BaseController
         }
         echo number_to_currency($totalBayar, 'IDR', 'id_ID', 2);
     }
-
     public function pembayaran()
     {
         if (!$this->cart->contents()) {
@@ -181,7 +174,6 @@ class Pembelian extends BaseController
             }
         }
     }
-
     public function report($tgl_awal = null, $tgl_akhir = null)
     {
         $_SESSION['tgl_awal'] = $tgl_awal == null ? date('Y-m-01') : $tgl_awal;
@@ -202,7 +194,6 @@ class Pembelian extends BaseController
         return view('pembelian/report', $data);
         // dd($data);
     }
-
     public function exportPDF()
     {
         $tgl1 = $_SESSION['tgl_awal'];
@@ -224,7 +215,6 @@ class Pembelian extends BaseController
         $this->response->setContentType('application/pdf');
         $pdf->Output('laporan-pembelian.pdf', 'I');
     }
-
     public function invoicePDF($buy_id = null)
     {
         $report = $this->buyDetail->getInvoice($buy_id);
@@ -243,7 +233,6 @@ class Pembelian extends BaseController
         $this->response->setContentType('application/pdf');
         $pdf->Output('laporan-pembelian.pdf', 'I');
     }
-
     public function exportExcel()
     {
         $tgl1 = $_SESSION['tgl_awal'];
@@ -288,7 +277,6 @@ class Pembelian extends BaseController
         $writer->save('php://output');
         exit;
     }
-
     public function filter()
     {
         $_SESSION['tgl_awal'] = $this->request->getVar('tgl_awal');

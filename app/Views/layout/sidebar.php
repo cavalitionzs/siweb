@@ -38,7 +38,7 @@
                     </a>
                     <a class="nav-link" href="/komik">
                         <div class="sb-nav-link-icon"><i class="fas fa-book"></i></div>
-                        Data Buku Komik
+                        Data Komik
                     </a>
                 <?php endif; ?>
                 <?php if (session()->role == "Manajer" || session()->role == "Owner" || session()->role == "Admin") : ?>

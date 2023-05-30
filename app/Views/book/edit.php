@@ -29,7 +29,10 @@
                         <div class="mb-3 row">
                             <label for="author" class="col-sm-2 col-form-label">Penulis</label>
                             <div class="col-sm-10">
-                                <input type="text" class="form-control" id="author" name="author" value="<?= old('author', $result['author']) ?>">
+                                <input type="text" class="form-control <?= $validation->hasError('author') ? 'is-invalid' : '' ?>" id="author" name="author" value="<?= old('author', $result['author']) ?>">
+                                <div id="validationServer03Feedback" class="invalid-feedback">
+                                    <?= $validation->getError('title') ?>
+                                </div>
                             </div>
                         </div>
                         <div class=" mb-3 row">
@@ -89,7 +92,7 @@
                             <button class="btn btn-primary me-md-2" type="submit">Edit</button>
                             <button class=" btn btn-danger" type="reset">Batal</button>
                             <div class="d-grip gap-2 d-md-block">
-                                <a class="btn btn-dark" type="button" href="<?= base_url('book') ?>">Kembali</a>
+                                <a class="btn btn-dark" type="button" href="<?= base_url('book/') ?>">Kembali</a>
                             </div>
                         </div>
                     </form>

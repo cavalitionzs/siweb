@@ -4,6 +4,8 @@ namespace App\Controllers;
 
 use App\Models\CategoryKomik;
 use \App\Models\KomikModel;
+use PhpOffice\PhpSpreadsheet\Reader\Xls;
+use PhpOffice\PhpSpreadsheet\Reader\Xlsx;
 
 define('_TITLE', 'Data Komik');
 
@@ -260,6 +262,45 @@ class Komik extends BaseController
             'cover' => $fileName,
         ]);
         session()->setFlashdata("msg", "Data Berhasil Ditambahkan!");
+        return redirect()->to('/komik');
+    }
+
+    public function importData()
+    {
+        $file = $this->request->getFile("file");
+        $ext  = $file->getExtension();
+        if ($ext == "xls")
+            $reader = new Xls();
+        else
+            $reader = new Xlsx();
+        $spreadsheet = $reader->load($file);
+        $sheet = $spreadsheet->getActiveSheet()->toArray();
+
+        foreach ($sheet as $key => $value) {
+            if ($key == 0) continue;
+
+            $namaFile = $this->defaultImage;
+            // dd($value[1]);
+            $slug     = url_title($value[1], '-', true);
+
+            // Cek Judul //
+            $dataOld = $this->komikModel->getBook($slug);
+            if (!$dataOld) {
+                $this->komikModel->save([
+                    'title' => $value[1],
+                    'author' => $value[2],
+                    'release_year' => $value[3],
+                    'price' => $value[4],
+                    'discount' => $value[5] ?? 0,
+                    'stock' => $value[6],
+                    'komik_category_id' => $value[7],
+                    'slug' => $slug,
+                    'cover' => $namaFile,
+                ]);
+            }
+        }
+        session()->setFlashdata("msg", "Data Behasil Diimport!");
+
         return redirect()->to('/komik');
     }
 }

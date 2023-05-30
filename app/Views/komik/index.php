@@ -22,6 +22,9 @@
                 <a class="btn btn-primary mb-3" type="button" href="<?= base_url('komik/create') ?>">
                     Tambah Buku Komik
                 </a>
+                <a class="btn btn-dark mb-3" type="button" data-bs-target="#modalImport" data-bs-toggle="modal">
+                    Import Buku
+                </a>
                 <table id="datatablesSimple">
                     <thead>
                         <tr>
@@ -39,19 +42,19 @@
                         foreach ($data_komik as $value) : ?>
                             <tr>
                                 <td><?= $no++ ?></td>
-                                <td><img src="img/<?= $value['cover'] ?>" alt="" width="100"></td>
+                                <td><img src="<?= base_url('img/' . $value['cover']) ?>" alt="" width=" 100"></td>
                                 <td><?= $value['title'] ?></td>
                                 <td><?= $value['name_category'] ?></td>
                                 <td><?= $value['price'] ?></td>
                                 <td><?= $value['stock'] ?></td>
                                 <td>
-                                    <a href="komik-detail/<?= $value['slug'] ?>" class="btn btn-info text-white">
+                                    <a href="komik/komik-detail/<?= $value['slug'] ?>" class="btn btn-info text-white">
                                         <i class="fas fa-info-circle"></i>
                                         Detail</a>
                                     <a href="<?= base_url('komik/edit/' . $value['slug']) ?>" class="btn btn-warning">
                                         <i class="fas fa-into-circle"></i>
                                         Ubah</a>
-                                    <form action="<?= base_url('komik/' . $value['komik_id']) ?>" method="post" class="d-inline">
+                                    <form action="<?= base_url('komik/delete/' . $value['komik_id']) ?>" method="post" class="d-inline">
                                         <?= csrf_field() ?>
                                         <input type="hidden" name="_method" value="DELETE">
                                         <button type="submit" class="btn btn-danger" role="button" onclick="return confirm('Apakah anda yakin?')">
@@ -67,4 +70,5 @@
         </div>
     </div>
 </main>
+<?= $this->include('komik/modal') ?>
 <?= $this->endSection() ?>
