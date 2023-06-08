@@ -30,11 +30,11 @@ class BerandaModel extends Model
     public function reportBeli($tahun)
     {
         return $this->db->table('komik_buy_detail as kbd')
-            ->select('MONTH(b.created_at) month, SUM(kbd.total_price) total')
-            ->join('komik_buy b', 'buy_id')
-            ->where('YEAR(b.created_at)', $tahun)
-            ->groupBy('MONTH(b.created_at)')
-            ->orderBy('MONTH(b.created_at)')
+            ->select('MONTH(kb.created_at) month, SUM(kbd.total_price) total')
+            ->join('komik_buy kb', 'buy_id')
+            ->where('YEAR(kb.created_at)', $tahun)
+            ->groupBy('MONTH(kb.created_at)')
+            ->orderBy('MONTH(kb.created_at)')
             ->get()->getResultArray();
     }
 

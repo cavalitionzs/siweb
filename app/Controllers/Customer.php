@@ -21,8 +21,8 @@ class Customer extends BaseController
             'phone' => 'Telp',
         ));
         $crud->where('deleted_at', null);
-        $crud->unsetAddFields(['created_at', 'updated_at']);
-        $crud->unsetEditFields(['created_at', 'updated_at']);
+        // $crud->unsetAddFields(['created_at', 'updated_at']);
+        // $crud->unsetEditFields(['created_at', 'updated_at']);
         $crud->setRule('name', 'Nama', 'required', [
             'required' => '{field} harus diisi!'
         ]);

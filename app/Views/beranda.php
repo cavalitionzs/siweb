@@ -75,15 +75,21 @@
                         </div>
                     </div>
                     <div class="card-body"><canvas id="chartCust" width="100%" height="40"></canvas></div>
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                        <button class="btn btn-outline-primary btn-sm" onclick="downloadChartCustomer('PDF')">UNDUH PDF</button>
+                        <a id="download-cust" download="chart-customer.png">
+                            <button class="btn btn-outline-primary btn-sm" onclick="downloadChartCustomer('PNG')">UNDUH PNG</button>
+                        </a>
+                    </div>
                 </div>
             </div>
-            <!-- <div class="col-xl-6">
+            <div class="col-xl-6">
                 <div class="card mb-4">
                     <div class="card-header">
                         <i class="fas fa-chart-area me-1"></i>
                         Grafik Transaksi Pembelian
                         <div class="col-sm-2 mt-3">
-                            <input type="number" id="tahun-beli" class="form-control" value="< ?= date('Y') ?>" onchange="chartBeli()">
+                            <input type="number" id="tahun-beli" class="form-control" value="<?= date('Y') ?>" onchange="chartBeli()">
                         </div>
                     </div>
                     <div class="card-body"><canvas id="chartBeli" width="100%" height="40"></canvas></div>
@@ -101,12 +107,18 @@
                         <i class="fas fa-chart-bar me-1"></i>
                         Grafik Supplier
                         <div class="col-sm-2 mt-3">
-                            <input type="number" id="tahun-supp" class="form-control" value="< ?= date('Y') ?>" onchange="chartSupplier()">
+                            <input type="number" id="tahun-supp" class="form-control" value="<?= date('Y') ?>" onchange="chartSupplier()">
                         </div>
                     </div>
                     <div class="card-body"><canvas id="chartSupp" width="100%" height="40"></canvas></div>
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                        <button class="btn btn-outline-primary btn-sm" onclick="downloadChartSupplier('PDF')">UNDUH PDF</button>
+                        <a id="download-supp" download="chart-supplier.png">
+                            <button class="btn btn-outline-primary btn-sm" onclick="downloadChartSupplier('PNG')">UNDUH PNG</button>
+                        </a>
+                    </div>
                 </div>
-            </div> -->
+            </div>
         </div>
     </div>
 </main>
@@ -116,59 +128,73 @@
     $(document).ready(function() {
         chartTransaksi()
         chartCustomer()
-        // chartBeli()
-        // chartSupplier()
+        chartBeli()
+        chartSupplier()
     });
 
     // TRANSAKSI //
     function setLineChart(dataset) {
         // Area Chart Example
+        // var ctx = document.getElementById("chartTransaksi");
+        // var myLineChart = new Chart(ctx, {
+        //     type: 'line',
+        //     data: {
+        //         labels: ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Ags", "Sep", "Okt", "Nov", "Des"],
+        //         datasets: [{
+        //             label: "Total",
+        //             lineTension: 0.3,
+        //             backgroundColor: "rgba(2,117,216,0.2)",
+        //             borderColor: "rgba(2,117,216,1)",
+        //             pointRadius: 5,
+        //             pointBackgroundColor: "rgba(2,117,216,1)",
+        //             pointBorderColor: "rgba(255,255,255,0.8)",
+        //             pointHoverRadius: 5,
+        //             pointHoverBackgroundColor: "rgba(2,117,216,1)",
+        //             pointHitRadius: 50,
+        //             pointBorderWidth: 2,
+        //             data: dataset,
+        //         }],
+        //     },
+        //     options: {
+        //         scales: {
+        //             xAxes: [{
+        //                 time: {
+        //                     unit: 'date'
+        //                 },
+        //                 gridLines: {
+        //                     display: false
+        //                 },
+        //                 ticks: {
+        //                     maxTicksLimit: 7
+        //                 }
+        //             }],
+        //             yAxes: [{
+        //                 ticks: {
+        //                     maxTicksLimit: 5
+        //                 },
+        //                 gridLines: {
+        //                     color: "rgba(0, 0, 0, .125)",
+        //                 }
+        //             }],
+        //         },
+        //         legend: {
+        //             display: false
+        //         }
+        //     }
+        // });
+
         var ctx = document.getElementById("chartTransaksi");
-        var myLineChart = new Chart(ctx, {
-            type: 'line',
+        var myPieChart = new Chart(ctx, {
+            type: 'pie',
             data: {
                 labels: ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Ags", "Sep", "Okt", "Nov", "Des"],
                 datasets: [{
-                    label: "Total",
-                    lineTension: 0.3,
-                    backgroundColor: "rgba(2,117,216,0.2)",
-                    borderColor: "rgba(2,117,216,1)",
-                    pointRadius: 5,
-                    pointBackgroundColor: "rgba(2,117,216,1)",
-                    pointBorderColor: "rgba(255,255,255,0.8)",
-                    pointHoverRadius: 5,
-                    pointHoverBackgroundColor: "rgba(2,117,216,1)",
-                    pointHitRadius: 50,
-                    pointBorderWidth: 2,
+                    label: "Jumlah",
+                    backgroundColor: ['#007bff', '#dc3545', '#ffc107', '#28a745', '#007bff', '#dc3545', '#ffc107', '#28a745', '#007bff', '#dc3545', '#ffc107', '#28a745'],
+                    // borderColor: "rgba(2,117,216,1)",
                     data: dataset,
                 }],
             },
-            options: {
-                scales: {
-                    xAxes: [{
-                        time: {
-                            unit: 'date'
-                        },
-                        gridLines: {
-                            display: false
-                        },
-                        ticks: {
-                            maxTicksLimit: 7
-                        }
-                    }],
-                    yAxes: [{
-                        ticks: {
-                            maxTicksLimit: 5
-                        },
-                        gridLines: {
-                            color: "rgba(0, 0, 0, .125)",
-                        }
-                    }],
-                },
-                legend: {
-                    display: false
-                }
-            }
         });
     }
 
@@ -267,18 +293,18 @@
             onrendered: function(canvas) {
                 var img = canvas.toDataURL("image/jpg", 1.0)
                 var doc = new jsPDF('p', 'pt', 'A4')
-                var lebarKonten = canvas.width
-                var tinggiKonten = canvas.height
-                var tinggiPage = lebarKonten / 592.28 * 841.89
-                var leftHeight = tinggiKonten
+                var lebarkonten = canvas.width
+                var tinggikonten = canvas.height
+                var tinggiPage = lebarkonten / 592.28 * 841.89
+                var leftHeight = tinggikonten
                 var position = 0
                 var imgWidth = 595.28
-                var imgHeight = 595.28 / lebarKonten * tinggiKonten
+                var imgHeight = 592.28 / lebarkonten * tinggikonten
                 if (leftHeight < tinggiPage) {
-
+                    doc.addImage(img, 'PNG', 0, 0, imgWidth, imgHeight)
                 } else {
                     while (leftHeight > 0) {
-                        doc.addImage(img, 'PNG', 0, position, imgWidth, imgWeight)
+                        doc.addImage(img, 'PNG', 0, position, imgWidth, imgHeight)
                         leftHeight -= tinggiPage
                         position -= 841.89
                         if (leftHeight > 0) {
@@ -288,7 +314,7 @@
                 }
                 doc.save(name)
             }
-        })
+        });
     }
 
     function downloadChartTransaksi(type) {
@@ -301,170 +327,196 @@
             downloadChartPDF(chart, "Chart-Transaksi.pdf")
         }
     }
+
+    function downloadChartCustomer(type) {
+        var download = document.getElementById('download-cust')
+        var chart = document.getElementById('chartCust')
+
+        if (type == "PNG") {
+            downloadChartImg(download, chart)
+        } else {
+            downloadChartPDF(chart, "Chart-Customer.pdf")
+        }
+    }
     // SELESAI CUSTOMER //
     // SELESAI JUAL //
 
     // BELI //
     // TRANSAKSI //
-    // function setLineChart(dataset2) {
-    //     // Area Chart Example
-    //     var ctx = document.getElementById("chartBeli");
-    //     var myLineChart = new Chart(ctx, {
-    //         type: 'line',
-    //         data: {
-    //             labels: ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Ags", "Sep", "Okt", "Nov", "Des"],
-    //             datasets: [{
-    //                 label: "Total",
-    //                 lineTension: 0.3,
-    //                 backgroundColor: "rgba(2,117,216,0.2)",
-    //                 borderColor: "rgba(2,117,216,1)",
-    //                 pointRadius: 5,
-    //                 pointBackgroundColor: "rgba(2,117,216,1)",
-    //                 pointBorderColor: "rgba(255,255,255,0.8)",
-    //                 pointHoverRadius: 5,
-    //                 pointHoverBackgroundColor: "rgba(2,117,216,1)",
-    //                 pointHitRadius: 50,
-    //                 pointBorderWidth: 2,
-    //                 data: dataset2,
-    //             }],
-    //         },
-    //         options: {
-    //             scales: {
-    //                 xAxes: [{
-    //                     time: {
-    //                         unit: 'date'
-    //                     },
-    //                     gridLines: {
-    //                         display: false
-    //                     },
-    //                     ticks: {
-    //                         maxTicksLimit: 7
-    //                     }
-    //                 }],
-    //                 yAxes: [{
-    //                     ticks: {
-    //                         maxTicksLimit: 5
-    //                     },
-    //                     gridLines: {
-    //                         color: "rgba(0, 0, 0, .125)",
-    //                     }
-    //                 }],
-    //             },
-    //             legend: {
-    //                 display: false
-    //             }
-    //         }
-    //     });
-    // }
+    function setLineChartBeli(dataset2) {
+        // Area Chart Example
+        // var ctx = document.getElementById("chartBeli");
+        // var myLineChart = new Chart(ctx, {
+        //     type: 'line',
+        //     data: {
+        //         labels: ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Ags", "Sep", "Okt", "Nov", "Des"],
+        //         datasets: [{
+        //             label: "Total",
+        //             lineTension: 0.3,
+        //             backgroundColor: "rgba(2,117,216,0.2)",
+        //             borderColor: "rgba(2,117,216,1)",
+        //             pointRadius: 5,
+        //             pointBackgroundColor: "rgba(2,117,216,1)",
+        //             pointBorderColor: "rgba(255,255,255,0.8)",
+        //             pointHoverRadius: 5,
+        //             pointHoverBackgroundColor: "rgba(2,117,216,1)",
+        //             pointHitRadius: 50,
+        //             pointBorderWidth: 2,
+        //             data: dataset2,
+        //         }],
+        //     },
+        //     options: {
+        //         scales: {
+        //             xAxes: [{
+        //                 time: {
+        //                     unit: 'date'
+        //                 },
+        //                 gridLines: {
+        //                     display: false
+        //                 },
+        //                 ticks: {
+        //                     maxTicksLimit: 7
+        //                 }
+        //             }],
+        //             yAxes: [{
+        //                 ticks: {
+        //                     maxTicksLimit: 5
+        //                 },
+        //                 gridLines: {
+        //                     color: "rgba(0, 0, 0, .125)",
+        //                 }
+        //             }],
+        //         },
+        //         legend: {
+        //             display: false
+        //         }
+        //     }
+        // });
 
-    // function chartTransaksi() {
-    //     var tahun = $('#tahun-beli').val();
-    //     $.ajax({
-    //         url: "<?= base_url('/chart-beli') ?>",
-    //         // url: "/chart-transaksi",
-    //         method: "POST",
-    //         data: {
-    //             'tahun': tahun,
-    //         },
-    //         success: function(response) {
-    //             var result = JSON.parse(response)
+        var ctx = document.getElementById("chartBeli");
+        var myPieChart = new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Ags", "Sep", "Okt", "Nov", "Des"],
+                datasets: [{
+                    label: "Jumlah",
+                    backgroundColor: ['#007bff', '#dc3545', '#ffc107', '#28a745', '#007bff', '#dc3545', '#ffc107', '#28a745', '#007bff', '#dc3545', '#ffc107', '#28a745'],
+                    // borderColor: "rgba(2,117,216,1)",
+                    data: dataset2,
+                }],
+            },
+        });
+    }
 
-    //             dataset = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-    //             $.each(result.data, function(i, val) {
-    //                 dataset[val.month - 1] = val.total
-    //             });
-    //             setLineChart(dataset2)
-    //         }
-    //     });
-    // }
+    function chartBeli() {
+        var tahun = $('#tahun-beli').val();
+        $.ajax({
+            url: "<?= base_url('/chart-beli') ?>",
+            // url: "/chart-transaksi",
+            method: "POST",
+            data: {
+                'tahun': tahun,
+            },
+            success: function(response) {
+                var result = JSON.parse(response)
+
+                dataset2 = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+                $.each(result.data, function(i, val) {
+                    dataset2[val.month - 1] = val.total
+                });
+                setLineChartBeli(dataset2)
+            }
+        });
+    }
     // // SELESAI TRANSAKSI //
     // // SUPPLIER //
-    // function setBarChart(dataset2) {
-    //     // BAR CHART EXAMPLE
-    //     var ctx = document.getElementById("chartSupp");
-    //     var myLineChart = new Chart(ctx, {
-    //         type: 'bar',
-    //         data: {
-    //             labels: ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Ags", "Sep", "Okt", "Nov", "Des"],
-    //             datasets: [{
-    //                 label: "Jumlah",
-    //                 backgroundColor: "rgba(2,117,216,1)",
-    //                 borderColor: "rgba(2,117,216,1)",
-    //                 data: dataset2,
-    //             }],
-    //         },
-    //         options: {
-    //             scales: {
-    //                 xAxes: [{
-    //                     time: {
-    //                         unit: 'month'
-    //                     },
-    //                     gridLines: {
-    //                         display: false
-    //                     },
-    //                     ticks: {
-    //                         maxTicksLimit: 6
-    //                     }
-    //                 }],
-    //                 yAxes: [{
-    //                     ticks: {
-    //                         maxTicksLimit: 5
-    //                     },
-    //                     gridLines: {
-    //                         display: true
-    //                     }
-    //                 }],
-    //             },
-    //             legend: {
-    //                 display: false
-    //             }
-    //         }
-    //     });
-    // }
+    function setBarChartBeli(dataset2) {
+        // BAR CHART EXAMPLE
+        var ctx = document.getElementById("chartSupp");
+        var myLineChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Ags", "Sep", "Okt", "Nov", "Des"],
+                datasets: [{
+                    label: "Jumlah",
+                    backgroundColor: "rgba(2,117,216,1)",
+                    borderColor: "rgba(2,117,216,1)",
+                    data: dataset2,
+                }],
+            },
+            options: {
+                scales: {
+                    xAxes: [{
+                        time: {
+                            unit: 'month'
+                        },
+                        gridLines: {
+                            display: false
+                        },
+                        ticks: {
+                            maxTicksLimit: 6
+                        }
+                    }],
+                    yAxes: [{
+                        ticks: {
+                            maxTicksLimit: 5
+                        },
+                        gridLines: {
+                            display: true
+                        }
+                    }],
+                },
+                legend: {
+                    display: false
+                }
+            }
+        });
+    }
 
-    // function chartCustomer() {
-    //     var tahun = $('#tahun-supp').val();
-    //     $.ajax({
-    //         url: "<?= base_url('/chart-supplier') ?>",
-    //         // url: "/chart-customer",
-    //         method: "POST",
-    //         data: {
-    //             'tahun': tahun,
-    //         },
-    //         success: function(response) {
-    //             var result = JSON.parse(response)
+    function chartSupplier() {
+        var tahun = $('#tahun-supp').val();
+        $.ajax({
+            url: "<?= base_url('/chart-supplier') ?>",
+            // url: "/chart-customer",
+            method: "POST",
+            data: {
+                'tahun': tahun,
+            },
+            success: function(response) {
+                var result = JSON.parse(response)
 
-    //             dataset = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-    //             $.each(result.data, function(i, val) {
-    //                 dataset[val.month - 1] = val.total
-    //             });
-    //             setBarChart(dataset2)
-    //         }
-    //     });
-    // }
+                dataset2 = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+                $.each(result.data, function(i, val) {
+                    dataset2[val.month - 1] = val.total
+                });
+                setBarChartBeli(dataset2)
+            }
+        });
+    }
 
-    // function downloadChartImg(download, chart) {
+
+    // function downloadChartImgBeli(download, chart) {
     //     var img = chart.toDataURL("image/jpg", 1.0).replace("image/jpg", "image/octet-stream")
     //     download.setAttribute("href", img)
     // }
 
-    // function downloadChartPDF(chart, name) {
+    // function downloadChartPDFBeli(chart, name) {
     //     html2canvas(chart, {
     //         onrendered: function(canvas) {
     //             var img = canvas.toDataURL("image/jpg", 1.0)
     //             var doc = new jsPDF('p', 'pt', 'A4')
-    //             var lebarKonten = canvas.width
-    //             var tinggiKonten = canvas.height
-    //             var tinggiPage = lebarKonten / 592.28 * 841.89
-    //             var leftHeight = tinggiKonten
+    //             var lebarkonten = canvas.width
+    //             var tinggikonten = canvas.height
+    //             var tinggiPage = lebarkonten / 592.28 * 841.89
+    //             var leftHeight = tinggikonten
     //             var position = 0
     //             var imgWidth = 595.28
-    //             var imgHeight = 595.28 / lebarKonten * tinggiKonten
+    //             var imgHeight = 592.28 / lebarkonten * tinggikonten
     //             if (leftHeight < tinggiPage) {
-
+    //                 doc.addImage(img, 'PNG', 0, 0, imgWidth, imgHeight)
     //             } else {
     //                 while (leftHeight > 0) {
-    //                     doc.addImage(img, 'PNG', 0, position, imgWidth, imgWeight)
+    //                     doc.addImage(img, 'PNG', 0, position, imgWidth, imgHeight)
     //                     leftHeight -= tinggiPage
     //                     position -= 841.89
     //                     if (leftHeight > 0) {
@@ -474,19 +526,30 @@
     //             }
     //             doc.save(name)
     //         }
-    //     })
+    //     });
     // }
 
-    // function downloadChartTransaksi(type) {
-    //     var download = document.getElementById('download-beli')
-    //     var chart = document.getElementById('chartBeli')
+    function downloadChartBeli(type) {
+        var download = document.getElementById('download-beli')
+        var chart = document.getElementById('chartBeli')
 
-    //     if (type == "PNG") {
-    //         downloadChartImg(download, chart)
-    //     } else {
-    //         downloadChartPDF(chart, "Chart-Pembelian.pdf")
-    //     }
-    // }
+        if (type == "PNG") {
+            downloadChartImg(download, chart)
+        } else {
+            downloadChartPDF(chart, "Chart-Pembelian.pdf")
+        }
+    }
+
+    function downloadChartSupplier(type) {
+        var download = document.getElementById('download-supp')
+        var chart = document.getElementById('chartSupp')
+
+        if (type == "PNG") {
+            downloadChartImg(download, chart)
+        } else {
+            downloadChartPDF(chart, "Chart-Supplier.pdf")
+        }
+    }
     // SELESAI BELI //
 </script>
 <?= $this->endSection() ?>
