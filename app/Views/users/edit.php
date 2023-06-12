@@ -58,6 +58,7 @@
                             </div>
                         </div>
                         <div class="d-grip gap-2 d-md-flex justify-content-md-end">
+                            <a class="btn btn-dark" href="<?= base_url('users/index') ?>">Kembali</a>
                             <button class="btn btn-primary me-md-2" type="submit">Simpan</button>
                             <button class="btn btn-danger" type="reset">Batal</button>
                         </div>

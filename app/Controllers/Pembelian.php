@@ -151,7 +151,7 @@ class Pembelian extends BaseController
                     $komik = $this->komik->where(['komik_id' => $items['id']])->first();
                     $this->komik->save([
                         'komik_id'  => $items['id'],
-                        'stock'    => $komik['stock'] - $items['qty'],
+                        'stock'    => $komik['stock'] + $items['qty'],
                     ]);
                 }
 
